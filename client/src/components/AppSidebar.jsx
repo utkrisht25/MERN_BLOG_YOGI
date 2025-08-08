@@ -20,6 +20,9 @@ export function AppSidebar() {
                 <SidebarMenuItem>
                     <SidebarMenuButton>
                         <Link to="/">Home</Link>
+                        <Link to="/">Inbox</Link>
+                        <Link to="/">Sent</Link>
+                        <Link to="/">Drafts</Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>

@@ -1,6 +1,6 @@
 import TopBar from "../components/Topbar.jsx";
 import { AppSidebar } from "../components/AppSidebar.jsx";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "../components/ui/sidebar";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/Footer.jsx";
