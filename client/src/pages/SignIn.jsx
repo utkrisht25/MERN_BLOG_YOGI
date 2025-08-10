@@ -11,12 +11,15 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { includes, z } from "zod";
 import { Card } from "@/components/ui/card";
-import { RouteSignUp } from "@/helpers/RouteName";
-import { Link } from "react-router-dom";
+import { RouteIndex, RouteSignUp } from "@/helpers/RouteName";
+import { Link, useNavigate } from "react-router-dom";
+import { getEvn } from "@/helpers/getEnv";
+import { showToast } from "@/helpers/showToast";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const formSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6, {
@@ -30,10 +33,24 @@ const SignIn = () => {
       password: "",
     },
   });
-  function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values) {
     console.log(values);
+     try {
+          const response = await fetch(`${getEvn('VITE_API_BASE_URL')}/auth/login` , {
+            method: 'post',
+            headers: { 'Content-type' : 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(values)
+          })
+          const data = await response.json();
+          if(!response.ok){
+            return showToast('error', data.message)
+          }
+          navigate(RouteIndex)
+          showToast('success', data.message)
+        } catch (error) {
+          showToast('error', error.message)
+        }
   }
   return (
     <div className="flex justify-center items-center h-screen w-screen">
@@ -66,7 +83,7 @@ const SignIn = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your password..." {...field} />
+                      <Input type='password' placeholder="Enter your password..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

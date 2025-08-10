@@ -1,6 +1,7 @@
 import { handleError } from "../helpers/handleError.js";
 import User from "../models/user.model.js";
 import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export const Register = async (req,res , next) => {
     try {
@@ -26,5 +27,38 @@ export const Register = async (req,res , next) => {
 }
 
 export const Login = async(req,res,next) =>{
-    
+    try {
+        const {email, password} = req.body;
+        const user = await User.findOne({email});
+        if(!user){
+            next(handleError(404, 'user not found.'))
+        }
+        const hashedPassword = user.password;
+        const comparePassword = bcryptjs.compare(password,hashedPassword );
+        if(!comparePassword){
+            next(handleError(403, 'invalid login credentials.'))
+        }
+        const token = jwt.sign({
+            _id:user._id,
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar
+        }, process.env.JWT_SECRET)
+
+        res.cookie('access_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV=== 'production'? 'none': 'strict',
+            path: '/' 
+        })
+        const newUser = user.toObject({getters:true});
+        delete newUser.password;
+        res.status(200).json({
+            success: true,
+            user: newUser,
+            message: 'Login successfull .'
+        })
+    } catch (error) {
+        next(handleError(500 , error.message))
+    }
 }
