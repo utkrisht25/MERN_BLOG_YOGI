@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import AuthRoute from './routes/Auth.route.js';
 
 dotenv.config();
 
@@ -21,6 +22,13 @@ app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
 }))
+
+
+// route setup
+app.use('/api/auth' , AuthRoute)
+
+
+
 
 mongoose.connect(process.env.MONGO_URI, {dbName: 'yogi-mern-blog'})
 .then(()=> console.log('connected to database'))
