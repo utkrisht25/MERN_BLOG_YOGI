@@ -17,6 +17,7 @@ import { RouteIndex, RouteSignUp } from "@/helpers/RouteName";
 import { Link, useNavigate } from "react-router-dom";
 import { getEvn } from "@/helpers/getEnv";
 import { showToast } from "@/helpers/showToast";
+import GoogleLogin from "@/components/GoogleLogin";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -35,29 +36,36 @@ const SignIn = () => {
   });
   async function onSubmit(values) {
     console.log(values);
-     try {
-          const response = await fetch(`${getEvn('VITE_API_BASE_URL')}/auth/login` , {
-            method: 'post',
-            headers: { 'Content-type' : 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(values)
-          })
-          const data = await response.json();
-          if(!response.ok){
-            return showToast('error', data.message)
-          }
-          navigate(RouteIndex)
-          showToast('success', data.message)
-        } catch (error) {
-          showToast('error', error.message)
+    try {
+      const response = await fetch(
+        `${getEvn("VITE_API_BASE_URL")}/auth/login`,
+        {
+          method: "post",
+          headers: { "Content-type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(values),
         }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return showToast("error", data.message);
+      }
+      navigate(RouteIndex);
+      showToast("success", data.message);
+    } catch (error) {
+      showToast("error", error.message);
+    }
   }
   return (
     <div className="flex justify-center items-center h-screen w-screen">
       <Card className="w-[400px] p-5">
-        <h1 className="text-2xl font-bold text-center">
-          Login Into Account
-        </h1>
+        <h1 className="text-2xl font-bold text-center">Login Into Account</h1>
+        <div className="">
+          <GoogleLogin/>
+          <div className="border my-5 flex justify-center items-center">
+            <span className="absolute bg-white text-sm">Or</span>
+          </div>
+        </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="mb-3">
@@ -83,7 +91,11 @@ const SignIn = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type='password' placeholder="Enter your password..." {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Enter your password..."
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -91,13 +103,18 @@ const SignIn = () => {
               />
             </div>
             <div className="mt-5">
-               <Button type="submit" className="w-full">
-                 Sign In
-               </Button>
-               <div className="flex gap-2 text-sm my-5 items-center justify-center"> 
-                  <p>Don&apos;t have account?</p>
-                  <Link to={RouteSignUp} className="text-blue-600 hover:underline">Sign Up</Link>
-               </div>
+              <Button type="submit" className="w-full">
+                Sign In
+              </Button>
+              <div className="flex gap-2 text-sm my-5 items-center justify-center">
+                <p>Don&apos;t have account?</p>
+                <Link
+                  to={RouteSignUp}
+                  className="text-blue-600 hover:underline"
+                >
+                  Sign Up
+                </Link>
+              </div>
             </div>
           </form>
         </Form>
