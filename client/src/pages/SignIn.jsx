@@ -18,8 +18,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { getEvn } from "@/helpers/getEnv";
 import { showToast } from "@/helpers/showToast";
 import GoogleLogin from "@/components/GoogleLogin";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/user/user.slice";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const formSchema = z.object({
     email: z.string().email(),
@@ -50,6 +53,7 @@ const SignIn = () => {
       if (!response.ok) {
         return showToast("error", data.message);
       }
+      dispatch(setUser(data.user));
       navigate(RouteIndex);
       showToast("success", data.message);
     } catch (error) {

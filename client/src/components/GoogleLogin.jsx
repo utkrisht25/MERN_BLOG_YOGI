@@ -7,8 +7,11 @@ import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '@/helpers/firebase';
 import { RouteIndex } from '@/helpers/RouteName';
 import { getEvn } from '@/helpers/getEnv';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/redux/user/user.slice';
 
 const GoogleLogin = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLogin = async () =>{
         try {
@@ -29,6 +32,7 @@ const GoogleLogin = () => {
             if(!response.ok){
                 return showToast('error', data.message)
             }
+            dispatch(setUser(data.user));
             navigate(RouteIndex)
             showToast('success', data.message)
 
