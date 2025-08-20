@@ -6,7 +6,7 @@ import bcryptjs from "bcryptjs"
 export const getUser = async (req, res , next) =>{
     try {
         const { userId } = req.params
-        const user = User.findOne({ _id: userId })
+        const user = await User.findOne({ _id: userId }).lean().exec()
         if(!user){
             next(handleError(404, "User not found!!"))
         }
@@ -26,7 +26,7 @@ export const updateUser = async(req, res, next) =>{
         const { userId } = req.params
 
         const user = await User.findById(userId)
-        user.name = data.name
+        user.username = data.username
         user.email = data.email
         user.bio = data.bio
 

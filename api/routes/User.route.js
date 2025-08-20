@@ -1,6 +1,6 @@
 import express from 'express';
-import { getUser , updateUser } from '../controllers/User.controller';
-import upload from '../config/multer';
+import { getUser , updateUser } from '../controllers/User.controller.js';
+import upload from '../config/multer.js';
 
 const UserRoute = express.Router()
 
