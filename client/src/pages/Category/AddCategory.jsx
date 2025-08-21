@@ -9,8 +9,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import slugify from 'slugify'
 import { showToast } from '@/helpers/showToast'
 import { getEvn } from '@/helpers/getEnv'
+import { useCategoryRefresh } from '@/contexts/CategoryContext'
 
 const AddCategory = () => {
+    const { triggerRefresh } = useCategoryRefresh() // ✅ Using context
+
 
     const formSchema = z.object({
         name: z.string().min(3, 'Name must be at least 3 character long.'),
@@ -48,6 +51,7 @@ const AddCategory = () => {
                 return showToast('error', data.message)
             }
             form.reset()
+            triggerRefresh() // ✅ Trigger sidebar update after successful category addition
             showToast('success', data.message)
         } catch (error) {
             showToast('error', error.message)
