@@ -22,6 +22,7 @@ const Profile = () => {
 
     const [filePreview, setPreview] = useState()
     const [file, setFile] = useState()
+    const [loadingUpdate, setLoading] = useState(false);
     const user = useSelector((state) => state.user)
     console.log('ye wala chal rha he ');
     console.log(user.user);
@@ -68,6 +69,7 @@ const Profile = () => {
 
     async function onSubmit(values) {
         try {
+            setLoading(true);
             const formData = new FormData()
             formData.append('file', file)
             formData.append('data', JSON.stringify(values))
@@ -83,6 +85,7 @@ const Profile = () => {
             if (!response.ok) {
                 return showToast('error', data.message)
             }
+            setLoading(false);
             dispath(setUser(data.user))
             showToast('success', data.message)
         } catch (error) {
@@ -185,7 +188,7 @@ const Profile = () => {
                                 />
                             </div>
 
-                            <Button type="submit" className="w-full">Save Changes</Button>
+                            <Button type="submit" className="w-full"> {loadingUpdate ? "Saving..." :"Save Changes" } </Button>
                         </form>
                     </Form>
 
