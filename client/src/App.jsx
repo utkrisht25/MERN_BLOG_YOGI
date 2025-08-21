@@ -3,6 +3,9 @@ import { Button } from "./components/ui/button";
 import Layout from "./Layout/Layout.jsx";
 import {
   RouteAddCategory,
+  RouteBlog,
+  RouteBlogAdd,
+  RouteBlogEdit,
   RouteCategoryDetails,
   RouteEditCategory,
   RouteIndex,
@@ -18,6 +21,9 @@ import AddCategory from "./pages/Category/AddCategory";
 import CategoryDetails from "./pages/Category/CategoryDetails";
 import EditCategory from "./pages/Category/EditCategory";
 import { CategoryProvider } from "./contexts/CategoryContext"; // ✅ Import the context
+import AddBlog from "./pages/Blog/AddBlog";
+import BlogDetails from "./pages/Blog/BlogDetails";
+import EditBlog from "./pages/Blog/EditBlog";
 
 function App() {
   return (
@@ -28,9 +34,16 @@ function App() {
             {/* we'll add our nested routes here */}
             <Route index element={<Index />} />
             <Route path={RouteProfile} element={<Profile />} />
+
+            {/* Blog category */}
             <Route path={RouteAddCategory} element={<AddCategory />} />
             <Route path={RouteCategoryDetails} element={<CategoryDetails />} />
             <Route path={RouteEditCategory()} element={<EditCategory />} />
+
+            {/* blog */}
+            <Route path={RouteBlogAdd}  element={<AddBlog/>} />
+            <Route path={RouteBlog}  element={<BlogDetails/>}/>
+            <Route path={RouteBlogEdit()}  element={<EditBlog/>}/>
           </Route>
 
           <Route path={RouteSignIn} element={<SignIn />} />

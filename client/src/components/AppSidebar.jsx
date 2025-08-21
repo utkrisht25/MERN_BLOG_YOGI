@@ -17,7 +17,7 @@ import { GrBlog } from "react-icons/gr";
 import { FaComments } from "react-icons/fa";
 import { PiUsersFill } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
-import { RouteCategoryDetails } from "@/helpers/RouteName.js";
+import { RouteBlog, RouteCategoryDetails } from "@/helpers/RouteName.js";
 import { useState } from "react";
 import { useFetch } from "@/hooks/useFetch.js";
 import { getEvn } from "@/helpers/getEnv.js";
@@ -62,7 +62,7 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <GrBlog />
-                <Link to="/">Blogs</Link>
+                <Link to={RouteBlog}>Blogs</Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
