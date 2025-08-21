@@ -44,7 +44,7 @@ export const addBlog = async (req, res, next) => {
 export const editBlog = async (req, res, next) => {
     try {
         const { blogid } = req.params
-        const blog = await Blog.findById(blogid).populate('category', 'username')
+        const blog = await Blog.findById(blogid).populate('category', 'name')
         if (!blog) {
             next(handleError(404, 'Data not found.'))
         }
