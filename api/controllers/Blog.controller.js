@@ -44,7 +44,7 @@ export const addBlog = async (req, res, next) => {
 export const editBlog = async (req, res, next) => {
     try {
         const { blogid } = req.params
-        const blog = await Blog.findById(blogid).populate('category', 'name')
+        const blog = await Blog.findById(blogid).populate('category', 'username')
         if (!blog) {
             next(handleError(404, 'Data not found.'))
         }
@@ -111,13 +111,7 @@ export const deleteBlog = async (req, res, next) => {
 }
 export const showAllBlog = async (req, res, next) => {
     try {
-        const user = req.user
-        let blog;
-        if (user.role === 'admin') {
-            blog = await Blog.find().populate('author', 'name avatar role').populate('category', 'name slug').sort({ createdAt: -1 }).lean().exec()
-        } else {
-            blog = await Blog.find({ author: user._id }).populate('author', 'name avatar role').populate('category', 'name slug').sort({ createdAt: -1 }).lean().exec()
-        }
+        const blog = await Blog.find().populate('author', 'username').populate('category', 'name').sort({createdAt:-1}).lean().exec()
         res.status(200).json({
             blog
         })
