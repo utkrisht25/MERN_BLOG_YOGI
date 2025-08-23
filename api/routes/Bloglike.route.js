@@ -7,6 +7,8 @@ const BlogLikeRoute = express.Router()
 
 
 BlogLikeRoute.post('/do-like', authenticate,  doLike)
-BlogLikeRoute.get('/get-like/:blogid/:userid?', likeCount)
+// BlogLikeRoute.get('/get-like/:blogid(/:userid)?', likeCount)
+BlogLikeRoute.get('/get-like/:blogid', likeCount)
+BlogLikeRoute.get('/get-like/:blogid/:userid', likeCount)
 
 export default BlogLikeRoute
