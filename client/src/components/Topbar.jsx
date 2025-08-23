@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from "@/assets/images/logo-white.png"
 import SearchBox from './SearchBox'
 import { IoLogIn, IoLogOutOutline } from "react-icons/io5";
 import { Button } from './ui/button';
 import { Link, useNavigate } from 'react-router-dom';
-import { RouteIndex, RouteProfile, RouteSignIn } from '@/helpers/RouteName';
+import { RouteIndex, RouteProfile, RouteSignIn , RouteBlogAdd} from '@/helpers/RouteName';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     DropdownMenu,
@@ -17,15 +17,22 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import usericon from '@/assets/images/user.png'
 import { FaPlus, FaRegUser } from 'react-icons/fa';
+import { IoMdSearch } from "react-icons/io";
+import { AiOutlineMenu } from "react-icons/ai";
 import { showToast } from '@/helpers/showToast';
 import { getEvn } from '@/helpers/getEnv';
 import { removeUser } from '@/redux/user/user.slice';
+import { useSidebar } from './ui/sidebar';
 
 
 const TopBar = () => {
+     const { toggleSidebar } = useSidebar()
+     const [showSearch , setShowSearch] = useState(false)
      const dispath = useDispatch()
     const navigate = useNavigate()
     const user = useSelector((state) => state.user)
+
+
     const handleLogout = async () =>{
         try {
             const response = await fetch(`${getEvn('VITE_API_BASE_URL')}/auth/logout`, {
@@ -44,23 +51,40 @@ const TopBar = () => {
             showToast('error', error.message)
         }
     }
+    const toggleSearch = () => {
+        setShowSearch(!showSearch)
+    }
+
   return (
-    <div className='flex justify-between items-center h-16 fixed p-5 bg-white w-full z-20 border-b border-gray-100'>
-        <div>
-            <img src={logo} />
-        </div>
-        <div className='w-[600px] '>
-            <SearchBox />
-        </div>
-        <div>
-            {!user.isLoggedIn ? 
-              <Button asChild  className='rounded-full'>
-                <Link to={RouteSignIn} >
-                   <IoLogIn />
-                   Sign In
+    <div className='flex justify-between items-center h-16 fixed w-full z-20 bg-white px-5 border-b'>
+            <div className='flex justify-center items-center gap-2'>
+                <button onClick={toggleSidebar} className='md:hidden' type='button'>
+                    <AiOutlineMenu />
+                </button>
+                <Link to={RouteIndex}>
+                    <img src={logo} className='md:w-auto w-48' />
                 </Link>
-            </Button>
-            : <DropdownMenu>
+            </div>
+            <div className='w-[500px]'>
+                <div className={`md:relative md:block absolute bg-white left-0 w-full md:top-0 top-16 md:p-0 p-5 ${showSearch ? 'block' : 'hidden'}`}>
+                    <SearchBox />
+                </div>
+            </div>
+            <div className='flex items-center gap-5'>
+
+                <button onClick={toggleSearch} type='button' className='md:hidden block'>
+                    <IoMdSearch size={25} />
+                </button>
+
+                {!user.isLoggedIn ?
+                    <Button asChild className="rounded-full">
+                        <Link to={RouteSignIn}  >
+                            <IoLogIn />
+                            Sign In
+                        </Link>
+                    </Button>
+                    :
+                    <DropdownMenu>
                         <DropdownMenuTrigger>
                             <Avatar>
                                 <AvatarImage src={user.user.avatar || usericon} />
@@ -80,7 +104,7 @@ const TopBar = () => {
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild className="cursor-pointer">
-                                <Link to=''>
+                                <Link to={RouteBlogAdd}>
                                     <FaPlus />
                                     Create Blog
                                 </Link>
@@ -93,13 +117,17 @@ const TopBar = () => {
                                 Logout
                             </DropdownMenuItem>
                         </DropdownMenuContent>
-                </DropdownMenu>
-            
-            }
-            
-        </div>
-    </div>
-  )
+                    </DropdownMenu>
+
+                }
+
+
+            </div>
+
+
+
+        </div >
+    )
 }
 
 export default TopBar

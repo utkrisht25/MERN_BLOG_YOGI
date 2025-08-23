@@ -24,8 +24,6 @@ const Profile = () => {
     const [file, setFile] = useState()
     const [loadingUpdate, setLoading] = useState(false);
     const user = useSelector((state) => state.user)
-    console.log('ye wala chal rha he ');
-    console.log(user.user);
     
     
     const { data: userData, loading, error } = useFetch(`${getEvn('VITE_API_BASE_URL')}/user/get-user/${user.user._id}`,
@@ -33,7 +31,7 @@ const Profile = () => {
     [user.user?._id]
     
   )
-    console.log(user);
+
 
 
 
@@ -74,13 +72,11 @@ const Profile = () => {
             formData.append('file', file)
             formData.append('data', JSON.stringify(values))
             
-             console.log('ye wala bhi chal rha he ');
             const response = await fetch(`${getEvn('VITE_API_BASE_URL')}/user/update-user/${userData.user._id}`, {
               method: 'put',
               credentials: 'include',
               body: formData
             })
-            console.log('ye wala put chal rha he ');
             const data = await response.json()
             if (!response.ok) {
                 return showToast('error', data.message)
