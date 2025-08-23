@@ -20,6 +20,7 @@ import { showToast } from "@/helpers/showToast";
 import GoogleLogin from "@/components/GoogleLogin";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/user/user.slice";
+import logo from '@/assets/images/logo-white.png'
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -63,6 +64,12 @@ const SignIn = () => {
   return (
     <div className="flex justify-center items-center h-screen w-screen">
       <Card className="w-[400px] p-5">
+         <div className='flex justify-center items-center mb-2'>
+
+                    <Link to={RouteIndex}>
+                        <img src={logo} className='md:w-auto w-48 h-18'/>
+                    </Link>
+           </div>
         <h1 className="text-2xl font-bold text-center">Login Into Account</h1>
         <div className="">
           <GoogleLogin/>

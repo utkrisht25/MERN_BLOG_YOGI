@@ -35,10 +35,7 @@ export function AppSidebar() {
     },[refreshData]);
   
   return (
-    <Sidebar>
-      <SidebarHeader className="bg-white">
-        <img src={logo} alt="logo image" width={120} />
-      </SidebarHeader>
+    <Sidebar className='mt-18'>
       <SidebarContent className="bg-white">
         <SidebarGroup>
           <SidebarMenu>

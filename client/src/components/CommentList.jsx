@@ -13,7 +13,6 @@ const CommentList = ({ props }) => {
         method: 'get',
         credentials: 'include',
     })
-    console.log(data.comments);
     
 
     

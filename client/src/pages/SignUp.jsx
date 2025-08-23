@@ -13,11 +13,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Card } from "@/components/ui/card";
-import { RouteSignIn } from "@/helpers/RouteName";
+import { RouteIndex, RouteSignIn } from "@/helpers/RouteName";
 import { Link, useNavigate } from "react-router-dom";
 import { getEvn } from "@/helpers/getEnv.js";
 import { showToast } from "@/helpers/showToast";
 import GoogleLogin from "@/components/GoogleLogin";
+import logo from '@/assets/images/logo-white.png'
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -68,6 +69,12 @@ const SignUp = () => {
   return (
     <div className="flex justify-center items-center h-screen w-screen">
       <Card className="w-[400px] p-5">
+         <div className='flex justify-center items-center mb-2'>
+
+                    <Link to={RouteIndex}>
+                        <img src={logo} className='md:w-auto w-48 h-18'/>
+                    </Link>
+                </div>
         <h1 className="text-2xl font-bold text-center">Create Your Account</h1>
         <div className="">
           <GoogleLogin />
