@@ -24,6 +24,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { RouteBlog } from '@/helpers/RouteName'
 import { decode } from 'entities'
 import Loading from '@/components/Loading'
+
 const EditBlog = () => {
     const { blogid } = useParams()
     const navigate = useNavigate()
@@ -33,6 +34,7 @@ const EditBlog = () => {
         credentials: 'include'
     })
 
+    // here we use blog/edit but this api is used to fetch the blog by blogid from backend
     const { data: blogData, loading: blogLoading } = useFetch(`${getEvn('VITE_API_BASE_URL')}/blog/edit/${blogid}`, {
         method: 'get',
         credentials: 'include'

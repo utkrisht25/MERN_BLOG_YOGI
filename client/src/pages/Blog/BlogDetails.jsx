@@ -20,13 +20,15 @@ import { useState } from 'react'
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import moment from 'moment'
+
+
 const BlogDetails = () => {
     const [refreshData, setRefreshData] = useState(false)
     const { data: blogData, loading, error } = useFetch(`${getEvn('VITE_API_BASE_URL')}/blog/get-all`, {
         method: 'get',
         credentials: 'include'
     }, [refreshData])
-    console.log(blogData);
+ 
     
 
     const handleDelete = (id) => {
