@@ -5,13 +5,18 @@ import {
   RouteAddCategory,
   RouteBlog,
   RouteBlogAdd,
+  RouteBlogByCategory,
+  RouteBlogDetails,
   RouteBlogEdit,
   RouteCategoryDetails,
+  RouteCommnentDetails,
   RouteEditCategory,
   RouteIndex,
   RouteProfile,
+  RouteSearch,
   RouteSignIn,
   RouteSignUp,
+  RouteUser,
 } from "./helpers/RouteName";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
@@ -24,6 +29,13 @@ import { CategoryProvider } from "./contexts/CategoryContext"; // ✅ Import the
 import AddBlog from "./pages/Blog/AddBlog";
 import BlogDetails from "./pages/Blog/BlogDetails";
 import EditBlog from "./pages/Blog/EditBlog";
+import SingleBlogDetails from "./pages/SingleBlogDetails";
+import BlogByCategory from "./pages/Blog/BlogByCategory";
+import SearchResult from "./pages/SearchResult";
+import AuthRouteProtechtion from "./components/AuthRouteProtechtion";
+import Comments from "./pages/Comments";
+import OnlyAdminAllowed from "./components/OnlyAdminAllowed";
+import User from "./pages/User";
 
 function App() {
   return (
@@ -33,17 +45,29 @@ function App() {
           <Route path={RouteIndex} element={<Layout />}>
             {/* we'll add our nested routes here */}
             <Route index element={<Index />} />
-            <Route path={RouteProfile} element={<Profile />} />
 
-            {/* Blog category */}
-            <Route path={RouteAddCategory} element={<AddCategory />} />
-            <Route path={RouteCategoryDetails} element={<CategoryDetails />} />
-            <Route path={RouteEditCategory()} element={<EditCategory />} />
 
-            {/* blog */}
-            <Route path={RouteBlogAdd}  element={<AddBlog/>} />
-            <Route path={RouteBlog}  element={<BlogDetails/>}/>
-            <Route path={RouteBlogEdit()}  element={<EditBlog/>}/>
+            <Route path={RouteBlogDetails()}  element={<SingleBlogDetails/>}/>
+            <Route path={RouteBlogByCategory()} element={<BlogByCategory />} />
+            <Route path={RouteSearch()} element={<SearchResult />} />
+
+
+            <Route element={<AuthRouteProtechtion />}>
+               <Route path={RouteProfile} element={<Profile />} />
+               <Route path={RouteBlogAdd}  element={<AddBlog/>} />
+               <Route path={RouteBlog}  element={<BlogDetails/>}/>
+               <Route path={RouteBlogEdit()}  element={<EditBlog/>}/>
+               <Route path={RouteCommnentDetails} element={<Comments />} />
+            </Route>
+
+            <Route element={OnlyAdminAllowed} >
+               <Route path={RouteAddCategory} element={<AddCategory />} />
+               <Route path={RouteCategoryDetails} element={<CategoryDetails />} />
+               <Route path={RouteEditCategory()} element={<EditCategory />} />
+               <Route path={RouteUser} element={<User />} />
+            </Route>
+
+            
           </Route>
 
           <Route path={RouteSignIn} element={<SignIn />} />
