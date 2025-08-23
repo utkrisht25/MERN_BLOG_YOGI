@@ -18,6 +18,7 @@ const GoogleLogin = () => {
             const googleResponse = await signInWithPopup(auth, provider)
             const user = googleResponse.user;
             const bodyData = {
+                role: user.role,
                 username: user.displayName,
                 email: user.email,
                 avatar: user.photoURL

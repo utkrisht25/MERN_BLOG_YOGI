@@ -3,6 +3,7 @@ import { handleError } from "../helpers/handleError.js"
 import Blog from "../models/blog.model.js"
 import { encode } from 'entities'
 import Category from "../models/category.model.js"
+import User from "../models/user.model.js"
 export const addBlog = async (req, res, next) => {
     try {
         const data = JSON.parse(req.body.data)
@@ -112,12 +113,18 @@ export const deleteBlog = async (req, res, next) => {
 }
 export const showAllBlog = async (req, res, next) => {
    try {
-        const user = req.user
+        const userId = req.user._id
+
+        const fullUser = await User.findById(userId).select('role');
+        if(!fullUser) {
+            return next(handleError(404, 'user not found'))
+        }
+       console.log(fullUser)
         let blog;
-        if (user.role === 'admin') {
+        if (fullUser.role === 'admin') {
             blog = await Blog.find().populate('author', 'username avatar role').populate('category', 'name slug').sort({ createdAt: -1 }).lean().exec()
         } else {
-            blog = await Blog.find({ author: user._id }).populate('author', 'username avatar role').populate('category', 'name slug').sort({ createdAt: -1 }).lean().exec()
+            blog = await Blog.find({ author: fullUser._id }).populate('author', 'username avatar role').populate('category', 'name slug').sort({ createdAt: -1 }).lean().exec()
         }
         res.status(200).json({
             blog

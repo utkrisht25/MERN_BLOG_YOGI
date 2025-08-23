@@ -1,5 +1,6 @@
 import { handleError } from "../helpers/handleError.js"
 import Comment from "../models/comment.model.js"
+import User from "../models/user.model.js"
 export const addcomment = async (req, res, next) => {
     try {
         const { user, blogid, comment } = req.body
@@ -53,14 +54,20 @@ export const commentCount = async (req, res, next) => {
 // but a user with role as user can only see the comments that are maked on the blogs that are created by himseelf only
 export const getAllComments = async (req, res, next) => {
     try {
-        const user = req.user
+       const userId = req.user._id
+
+        const fullUser = await User.findById(userId).select('role');
+        if(!fullUser) {
+            return next(handleError(404, 'user not found'))
+        }
+       console.log(fullUser)
         let comments
-        if (user.role === 'admin') {
+        if (fullUser.role === 'admin') {
             comments = await Comment.find().populate('blogid', 'title').populate('user', 'username')
 
         } else {
 
-            comments = await Comment.find({ user: user._id }).populate('blogid', 'title').populate('user', 'username')
+            comments = await Comment.find({ user: fullUser._id }).populate('blogid', 'title').populate('user', 'username')
         }
 
         res.status(200).json({
