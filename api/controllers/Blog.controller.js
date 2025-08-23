@@ -41,6 +41,7 @@ export const addBlog = async (req, res, next) => {
         next(handleError(500, error.message))
     }
 }
+// editblog function is to get the individual blog 
 export const editBlog = async (req, res, next) => {
     try {
         const { blogid } = req.params
@@ -110,8 +111,14 @@ export const deleteBlog = async (req, res, next) => {
     }
 }
 export const showAllBlog = async (req, res, next) => {
-    try {
-        const blog = await Blog.find().populate('author', 'username avatar role').populate('category', 'name slug').sort({createdAt:-1}).lean().exec()
+   try {
+        const user = req.user
+        let blog;
+        if (user.role === 'admin') {
+            blog = await Blog.find().populate('author', 'username avatar role').populate('category', 'name slug').sort({ createdAt: -1 }).lean().exec()
+        } else {
+            blog = await Blog.find({ author: user._id }).populate('author', 'username avatar role').populate('category', 'name slug').sort({ createdAt: -1 }).lean().exec()
+        }
         res.status(200).json({
             blog
         })
@@ -127,6 +134,74 @@ export const getBlog = async (req, res, next) =>{
         res.status(200).json({
                 blog
         })        
+    } catch (error) {
+        next(handleError(500, error.message))
+    }
+}
+
+// this function is used to rendered the related blogs in singleBlogDetails page 
+export const getRelatedBlog = async (req, res, next) => {
+    try {
+        const { category, blog } = req.params
+
+        const categoryData = await Category.findOne({ slug: category })
+        if (!categoryData) {
+            return next(404, 'Category data not found.')
+        }
+        const categoryId = categoryData._id
+        // here in related blogs we get all the blogs of that category explicit the curretly opened blog
+        const relatedBlog = await Blog.find({ category: categoryId, slug: { $ne: blog } }).lean().exec()
+        res.status(200).json({
+            relatedBlog
+        })
+    } catch (error) {
+        next(handleError(500, error.message))
+    }
+}
+
+// this function is used for getting the blogs according to the category and rendered when clicked on the category item in sidebar
+export const getBlogByCategory = async (req, res, next) => {
+    try {
+        const { category } = req.params
+
+        const categoryData = await Category.findOne({ slug: category })
+        if (!categoryData) {
+            return next(404, 'Category data not found.')
+        }
+        const categoryId = categoryData._id
+        const blog = await Blog.find({ category: categoryId }).populate('author', 'username avatar role').populate('category', 'name slug').lean().exec()
+        res.status(200).json({
+            blog,
+            categoryData
+        })
+    } catch (error) {
+        next(handleError(500, error.message))
+    }
+}
+
+export const search = async (req, res, next) => {
+    try {
+        // we are not using params here , we get the query directly by req.query
+        const { q } = req.query
+ 
+        // here regex is used to get to search the q paramter in title and option 'i' is for case insensative 
+        const blog = await Blog.find({ title: { $regex: q, $options: 'i' } }).populate('author', 'username avatar role').populate('category', 'name slug').lean().exec()
+        res.status(200).json({
+            blog,
+        })
+    } catch (error) {
+        next(handleError(500, error.message))
+    }
+}
+
+// this fucntion is used to get all the blogs created by all the users that only admin can see in our application
+export const getAllBlogs = async (req, res, next) => {
+    try {
+        const user = req.user
+        const blog = await Blog.find().populate('author', 'username avatar role').populate('category', 'name slug').sort({ createdAt: -1 }).lean().exec()
+        res.status(200).json({
+            blog
+        })
     } catch (error) {
         next(handleError(500, error.message))
     }
