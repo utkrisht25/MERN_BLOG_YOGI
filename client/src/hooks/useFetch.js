@@ -8,7 +8,6 @@ export const useFetch = ( url , options = {}, dependencies = []) =>{
     useEffect(() =>{
         const fetchData = async () =>{
             setLoading(true);
-            console.log('ye main wala chal rha he');
             
             try {
                 const response = await fetch(url, options)
@@ -16,7 +15,6 @@ export const useFetch = ( url , options = {}, dependencies = []) =>{
                 if(!response.ok){
                     throw new Error(`Error: ${response.statusText}, ${response.status}`)
                 }
-                console.log('yaha pe bhi aa gye hum');
                 
                 setData(responseData);
                 setError();

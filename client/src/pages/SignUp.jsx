@@ -46,7 +46,7 @@ const SignUp = () => {
     },
   });
   async function onSubmit(values) {
-    console.log(values);
+
     try {
       const response = await fetch(
         `${getEvn("VITE_API_BASE_URL")}/auth/register`,
