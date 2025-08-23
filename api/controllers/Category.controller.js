@@ -49,6 +49,8 @@ export const updateCategory = async (req, res, next) => {
         next(handleError(500, error.message))
     }
 }
+
+// this function is used to delete category in only admin access
 export const deleteCategory = async (req, res, next) => {
     try {
         const { categoryid } = req.params
@@ -61,6 +63,8 @@ export const deleteCategory = async (req, res, next) => {
         next(handleError(500, error.message))
     }
 }
+
+// this function is tp show all the category data in admin only protected routes and rendered this data in app side bar
 export const getAllCategory = async (req, res, next) => {
     try {
         const category = await Category.find().sort({ name: 1 }).lean().exec()
