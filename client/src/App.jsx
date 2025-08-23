@@ -60,7 +60,7 @@ function App() {
                <Route path={RouteCommnentDetails} element={<Comments />} />
             </Route>
 
-            <Route element={OnlyAdminAllowed} >
+            <Route element={< OnlyAdminAllowed />} >
                <Route path={RouteAddCategory} element={<AddCategory />} />
                <Route path={RouteCategoryDetails} element={<CategoryDetails />} />
                <Route path={RouteEditCategory()} element={<EditCategory />} />

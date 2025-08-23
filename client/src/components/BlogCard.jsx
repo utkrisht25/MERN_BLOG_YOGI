@@ -8,11 +8,11 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import usericon from '@/assets/images/user.png'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-// import { RouteBlogDetails } from '@/helpers/RouteName'
+import { RouteBlogDetails } from '@/helpers/RouteName'
 const BlogCard = ({ props }) => {
  
     return (
-        <Link to=''>
+        <Link to={RouteBlogDetails(props.category.slug, props.slug)}>
             <Card className="pt-5">
                 <CardContent>
                     <div className='flex items-center justify-between'>
